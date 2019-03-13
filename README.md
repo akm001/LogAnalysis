@@ -31,6 +31,6 @@ select count(status) as all, time::date as d from log group by d;`
 select count(status) as failed, time::date as d from log where status != '200 OK' group by d order by d;`
 
 ## How to use :
-From shell run: `python3 loganalysis.py`
+From shell run: `python3 LogAnalysis.py`
 
 #### Thanks
