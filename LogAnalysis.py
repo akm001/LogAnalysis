@@ -4,6 +4,7 @@ conn = psycopg2.connect("dbname=news")
 
 cr = conn.cursor()
 
+# Q1 solution require 1 sql view (top3)
 cr.execute("select title , num from top3 join articles "
            "on position(name in lower(title))>0 order by num desc ")
 
@@ -16,7 +17,8 @@ for x in r:
 
 print()
 print("The most popular article authors of all time:")
-# Q2
+
+# Q2 Solution require 2 sql views ( viewsum, author_views )
 cr.execute("select name, s from authors join author_views "
            "on author = id order by s desc")
 
@@ -26,7 +28,8 @@ for x in q2:
 
 print()
 print("When more than 1% of requests lead to errors:")
-# Q3
+
+# Q3 solution require 2 sql views (allviews, fail)
 cr.execute("select allviews.d , "
            "(fail.failed::float / allviews.all::float) * 100 as perc"
            " from allviews join fail on allviews.d = fail.d "
