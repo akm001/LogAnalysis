@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import psycopg2
 
+
 def db_connect():
     """
     Create and return a database connection and cursor.
@@ -38,10 +39,11 @@ def execute_query(query):
     db.close()
     return r
 
+
 def print_top_articles():
     """Print out the top 3 articles of all time."""
     query = """
-            select title , num from top3 join articles 
+            select title , num from top3 join articles
             on position(slug in path)>0 order by num desc;
             """
     results = execute_query(query)
@@ -54,10 +56,11 @@ def print_top_articles():
 
     print()
 
+
 def print_top_authors():
     """Print a list of authors ranked by article views."""
     query = """
-            select name, s from authors join author_views 
+            select name, s from authors join author_views
             on author = id order by s desc;
             """
     results = execute_query(query)
@@ -65,9 +68,10 @@ def print_top_authors():
     # add code to print results
     print("The most popular article authors of all time:")
     for x in results:
-        print('"' + "%-22s" % x[0] + '"' + ' -- ' + "%6s" % str(x[1]) + ' views')
+        print('"{:22s} " -- {:6s} views'.format(x[0], str(x[1])))
 
     print()
+
 
 def print_errors_over_one():
     """Print out the error report.
@@ -76,9 +80,9 @@ def print_errors_over_one():
     more than 1% of logged access requests were errors.
     """
     query = """
-            select allviews.d , 
+            select allviews.d ,
             (fail.failed::float / allviews.all::float) * 100 as perc
-             from allviews join fail on allviews.d = fail.d 
+             from allviews join fail on allviews.d = fail.d
             where (fail.failed::float / allviews.all::float) * 100 > 1;
             """
     results = execute_query(query)
