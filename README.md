@@ -1,9 +1,11 @@
 # Log Analysis
+'''
 It is python script uses psycopg2 to query a mock PostgreSQL database for a fictional news website and generate a report.
-The database consist of three tables (authors which contains authors' name and info,
-articles which contains articles info like title,slug,author,.. ,
-log which is web server logs data ),
-The report will answer the following questions:
+The database consist of three tables (**authors** _which contains authors' name and info_,
+**articles** _which contains articles info like title,slug,author,.._ ,
+**log** _which is web server logs data_ ),
+'''
+**The report will answer the following questions:**
 
 * The most popular three articles of all time ?
 * The most popular article authors of all time ?
