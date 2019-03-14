@@ -92,6 +92,8 @@ def print_errors_over_one():
     for x in results:
         print('{:%B %d, %Y} -- {:.2f}% errors'.format(x[0], x[1]))
     print()
+
+
 if __name__ == '__main__':
     print_top_articles()
     print_top_authors()
