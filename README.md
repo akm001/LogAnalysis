@@ -12,7 +12,7 @@ The database consist of three tables (**authors** _which contains authors' name 
 
 ## Installation
 It require the following software to be up and running on you OS ( Ubuntu on my case):
-* Python3 and python3-psycopg2 packages: `apt nstall python3 python3-psycopg2`
+* Python3 and python3-psycopg2 packages: `apt install python3 python3-psycopg2`
 * postgresql server: `apt install postgresql`
 
 ## Database preparation:
