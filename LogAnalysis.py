@@ -68,7 +68,7 @@ def print_top_authors():
     # add code to print results
     print("The most popular article authors of all time:")
     for x in results:
-        print('"{:22s} " -- {:6s} views'.format(x[0], str(x[1])))
+        print('"{:22s} " -- {:>6s} views'.format(x[0], str(x[1])))
 
     print()
 
