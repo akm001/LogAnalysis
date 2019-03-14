@@ -1,41 +1,94 @@
+#!/usr/bin/python3
 import psycopg2
 
-conn = psycopg2.connect("dbname=news")
+def db_connect():
+    """
+    Create and return a database connection and cursor.
 
-cr = conn.cursor()
+    The functions creates and returns a database connection and cursor to the
+    database defined by DBNAME.
+    Returns:
+        db, c - a tuple. The first element is a connection to the database.
+                The second element is a cursor for the database.
+    """
+    # Your code here
+    db = psycopg2.connect("dbname=news")
 
-# Q1 solution require 1 sql view (top3)
-cr.execute("select title , num from top3 join articles "
-           "on position(name in lower(title))>0 order by num desc ")
+    c = db.cursor()
 
-r = cr.fetchall()
+    return db, c
 
-print("The most popular three articles of all time:")
 
-for x in r:
-    print('"' + x[0] + '"' + ' -- ' + str(x[1]) + ' views')
+def execute_query(query):
+    """
+    execute_query returns the results of an SQL query.
 
-print()
-print("The most popular article authors of all time:")
+    execute_query takes an SQL query as a parameter,
+    executes the query and returns the results as a list of tuples.
+    args:
+    query - an SQL query statement to be executed.
 
-# Q2 Solution require 2 sql views ( viewsum, author_views )
-cr.execute("select name, s from authors join author_views "
-           "on author = id order by s desc")
+    returns:
+    A list of tuples containing the results of the query.
+    """
+    # Your code here
+    db, c = db_connect()
+    c.execute(query)
+    r = c.fetchall()
+    db.close()
+    return r
 
-q2 = cr.fetchall()
-for x in q2:
-    print('"' + "%-22s" % x[0] + '"' + ' -- '+"%6s" % str(x[1]) + ' views')
+def print_top_articles():
+    """Print out the top 3 articles of all time."""
+    query = """
+            select title , num from top3 join articles 
+            on position(slug in path)>0 order by num desc;
+            """
+    results = execute_query(query)
 
-print()
-print("When more than 1% of requests lead to errors:")
+    # add code to print results
+    print("The most popular three articles of all time:")
 
-# Q3 solution require 2 sql views (allviews, fail)
-cr.execute("select allviews.d , "
-           "(fail.failed::float / allviews.all::float) * 100 as perc"
-           " from allviews join fail on allviews.d = fail.d "
-           "where (fail.failed::float / allviews.all::float) * 100 > 1")
-q3 = cr.fetchall()
-for x in q3:
-    print(x[0].strftime("%B %d, %Y") + ' -- ' + "%2.2f" % x[1] + '% errors')
+    for x in results:
+        print('"' + x[0] + '"' + ' -- ' + str(x[1]) + ' views')
 
-conn.close()
+    print()
+
+def print_top_authors():
+    """Print a list of authors ranked by article views."""
+    query = """
+            select name, s from authors join author_views 
+            on author = id order by s desc;
+            """
+    results = execute_query(query)
+
+    # add code to print results
+    print("The most popular article authors of all time:")
+    for x in results:
+        print('"' + "%-22s" % x[0] + '"' + ' -- ' + "%6s" % str(x[1]) + ' views')
+
+    print()
+
+def print_errors_over_one():
+    """Print out the error report.
+
+    This function prints out the days and that day's error percentage where
+    more than 1% of logged access requests were errors.
+    """
+    query = """
+            select allviews.d , 
+            (fail.failed::float / allviews.all::float) * 100 as perc
+             from allviews join fail on allviews.d = fail.d 
+            where (fail.failed::float / allviews.all::float) * 100 > 1;
+            """
+    results = execute_query(query)
+
+    # add code to print results
+    print("When more than 1% of requests lead to errors:")
+    for x in results:
+        print('{:%B %d, %Y} -- {:.2f}% errors'.format(x[0], x[1]))
+    print()
+if __name__ == '__main__':
+    print_top_articles()
+    print_top_authors()
+    print_errors_over_one()
