@@ -1,36 +1,29 @@
 # Log Analysis
+It is python script uses psycopg2 to query a mock PostgreSQL database for a fictional news website and generate a report.
+The database consist of three tables (authors which contains authors' name and info,
+articles which contains articles info like title,slug,author,.. ,
+log which is web server logs data ),
+The report will answer the following questions:
 
-It is a simple python script that connect to a database and query specific data from some tables to generate a nice simple report.
-
-Created by **Ahmed Kamel** for _**FSND**_.
+* The most popular three articles of all time ?
+* The most popular article authors of all time ?
+* When more than 1% of requests lead to errors ?
 
 ## Installation
-It require the following software to be up and runing on you OS ( Ubuntu on my case):
-* Python3 and python3-psycopg2 packages.
-* postgresql server.
+It require the following software to be up and running on you OS ( Ubuntu on my case):
+* Python3 and python3-psycopg2 packages: `apt nstall python3 python3-psycopg2`
+* postgresql server: `apt install postgresql`
 
-## Database requirements:
-* Full Stack Nano Degree provide you with the `.sql` file that contain our database, you can download it from [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
-* Create database called news `create database news;`
-* Import the data into database from the file `psql -d news -f newsdata.sql`
-* Create following SQL views is required in our code:
-
-`create view top3 as
-select replace((select replace(path,'/article/','') as t),'-',' ') as name, count(*) as num from log where path like '%article%' group by path order by num desc limit 3;`
-
-`create view viewsum as
-select replace((select replace(path,'/article/','') as t),'-',' ') as name, count(*) as num from log group by path order by num desc;`
-
-`create view author_views as
-select author , sum(num) as s from viewsum join articles on position(name in lower(title))>0 group by author order by s desc;`
-
-`create view allviews as
-select count(status) as all, time::date as d from log group by d;`
-
-`create view fail as
-select count(status) as failed, time::date as d from log where status != '200 OK' group by d order by d;`
+## Database preparation:
+* Create database called **news** `create database news;`
+* FSND provides you with the `.sql` file that contain our database, you can download it from [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip),
+import it: `psql -d news -f newsdata.sql`
+* Import the SQL views which is required in our code: `psql -d news -f views.sql`
 
 ## How to use :
-From shell run: `python3 LogAnalysis.py`
+From shell or cmd run: `python3 LogAnalysis.py`
+Or make sure you have execute permission on the script: `chmod u+x LogAnalysis.py`
+then run `./LogAnalysis.py`
 
 #### Thanks
+Created by **Ahmed Kamel** for _**FSND**_.
