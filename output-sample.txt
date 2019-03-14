@@ -8,7 +8,7 @@ The most popular article authors of all time:
 "Ursula La Multa        " -- 512805 views
 "Rudolf von Treppenwitz " -- 427781 views
 "Anonymous Contributor  " -- 171762 views
-"Markoff Chaney         " -- 85387  views
+"Markoff Chaney         " --  85387 views
 
 When more than 1% of requests lead to errors:
 July 17, 2016 -- 2.26% errors
