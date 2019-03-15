@@ -33,10 +33,8 @@ def execute_query(query):
     A list of tuples containing the results of the query.
     """
     # Your code here
-    db, c = db_connect()
     c.execute(query)
     r = c.fetchall()
-    db.close()
     return r
 
 
@@ -52,7 +50,7 @@ def print_top_articles():
     print("The most popular three articles of all time:")
 
     for x in results:
-        print('"' + x[0] + '"' + ' -- ' + str(x[1]) + ' views')
+        print(f'\"  {x[0]}  \" -- {str(x[1])} views')
 
     print()
 
@@ -68,7 +66,7 @@ def print_top_authors():
     # add code to print results
     print("The most popular article authors of all time:")
     for x in results:
-        print('"{:22s} " -- {:>6s} views'.format(x[0], str(x[1])))
+        print(f'\"{x[0]:22s} \" -- {str(x[1]):>6s} views')
 
     print()
 
@@ -90,11 +88,13 @@ def print_errors_over_one():
     # add code to print results
     print("When more than 1% of requests lead to errors:")
     for x in results:
-        print('{:%B %d, %Y} -- {:.2f}% errors'.format(x[0], x[1]))
+        print(f'{x[0]:%B %d, %Y} -- {x[1]:.2f}% errors')
     print()
 
 
 if __name__ == '__main__':
+    db, c = db_connect()
     print_top_articles()
     print_top_authors()
     print_errors_over_one()
+    db.close()
